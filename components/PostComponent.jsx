@@ -5,10 +5,11 @@ import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { CommentIcon, LocationIcon } from "../components/icons/icons";
 
 export const PostComponent = ({
+  id,
   way,
   name,
-  country,
   commentsNumber,
+  country,
   coords,
 }) => {
   const navigation = useNavigation();

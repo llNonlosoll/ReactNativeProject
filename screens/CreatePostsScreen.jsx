@@ -6,6 +6,9 @@ import { useDispatch } from "react-redux";
 import { addPost } from "../redux/posts/postsSlice";
 import { useNavigation } from "@react-navigation/native";
 
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
+
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -67,6 +70,23 @@ export const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
+  console.log(location);
+
+  const writeDataToFirestore = async () => {
+    try {
+      const docRef = await addDoc(collection(db, "posts"), {
+        photoName,
+        locationName,
+        photoUri,
+        location,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      throw e;
+    }
+  };
+
   const clearData = () => {
     setPhotoName("");
     setLocationName("");
@@ -74,7 +94,8 @@ export const CreatePostsScreen = () => {
   };
 
   const handlePostPhoto = () => {
-    dispatch(addPost({ photoName, locationName, photoUri, location }));
+    writeDataToFirestore();
+    // dispatch(addPost({ photoName, locationName, photoUri, location }));
     navigation.navigate("Home", { screen: "Posts" });
     clearData();
   };

@@ -10,30 +10,33 @@ export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    addPost: {
-      reducer(state, { payload }) {
-        state.posts.push(payload);
-      },
-      prepare({
-        photoName,
-        locationName,
-        photoUri,
-        commentsNumber = 0,
-        location,
-      }) {
-        return {
-          payload: {
-            id: uuid.v4(),
-            name: photoName,
-            imageUrl: photoUri,
-            location: locationName,
-            commentsNumber,
-            coords: location,
-            isNewPost: true,
-          },
-        };
-      },
+    addPost(state, action) {
+      state.posts = action.payload;
     },
+    // {
+    //   reducer(state, { payload }) {
+    //     state.posts.push(payload);
+    //   },
+    //   prepare({
+    //     id,
+    //     photoName,
+    //     locationName,
+    //     photoUri,
+    //     commentsNumber = 0,
+    //     location,
+    //   }) {
+    //     return {
+    //       payload: {
+    //         id,
+    //         name: photoName,
+    //         imageUrl: photoUri,
+    //         location: locationName,
+    //         commentsNumber,
+    //         coords: location,
+    //       },
+    //     };
+    //   },
+    // },
   },
 });
 

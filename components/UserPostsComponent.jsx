@@ -5,12 +5,13 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { CommentIcon, LikeIcon, LocationIcon } from "../components/icons/icons";
 
 export const UserPostsComponent = ({
+  id,
   way,
   name,
-  country,
   commentsNumber,
-  likes,
+  country,
   coords,
+  likes,
 }) => {
   const navigation = useNavigation();
 

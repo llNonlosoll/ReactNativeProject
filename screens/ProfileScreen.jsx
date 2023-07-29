@@ -40,12 +40,13 @@ export const ProfileScreen = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <UserPostsComponent
-              way={item.imageUrl}
-              name={item.name}
+              id={item.id}
+              way={item.data.photoUri}
+              name={item.data.photoName}
               commentsNumber={item.commentsNumber}
-              country={item.location}
+              country={item.data.locationName}
+              coords={item.data.location}
               likes={item.likes}
-              coords={item.coords}
             />
           )}
         />

@@ -28,59 +28,59 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
-          <MainStack.Navigator initialRouteName="Login">
-            <MainStack.Screen
-              name="Home"
-              component={Home}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <MainStack.Screen
-              name="Registration"
-              component={RegistrationScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <MainStack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <MainStack.Screen
-              name="Comments"
-              component={CommentsScreen}
-              options={{
-                title: "Коментарі",
-                headerTitleAlign: "center",
-                headerShown: true,
-                headerLeft: () => <BackButtonComponent />,
-                headerStyle: {
-                  borderBottomWidth: 1,
-                },
-              }}
-            />
-            <MainStack.Screen
-              name="Map"
-              component={MapScreen}
-              options={{
-                title: "Мапа",
-                headerTitleAlign: "center",
-                headerShown: true,
-                headerLeft: () => <BackButtonComponent />,
-                headerStyle: {
-                  borderBottomWidth: 1,
-                },
-              }}
-            />
-          </MainStack.Navigator>
-        </NavigationContainer>
-      </PersistGate>
+      {/* <PersistGate loading={null} persistor={persistor}> */}
+      <NavigationContainer>
+        <MainStack.Navigator initialRouteName="Login">
+          <MainStack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <MainStack.Screen
+            name="Registration"
+            component={RegistrationScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <MainStack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <MainStack.Screen
+            name="Comments"
+            component={CommentsScreen}
+            options={{
+              title: "Коментарі",
+              headerTitleAlign: "center",
+              headerShown: true,
+              headerLeft: () => <BackButtonComponent />,
+              headerStyle: {
+                borderBottomWidth: 1,
+              },
+            }}
+          />
+          <MainStack.Screen
+            name="Map"
+            component={MapScreen}
+            options={{
+              title: "Мапа",
+              headerTitleAlign: "center",
+              headerShown: true,
+              headerLeft: () => <BackButtonComponent />,
+              headerStyle: {
+                borderBottomWidth: 1,
+              },
+            }}
+          />
+        </MainStack.Navigator>
+      </NavigationContainer>
+      {/* </PersistGate> */}
     </Provider>
   );
 }

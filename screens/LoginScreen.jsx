@@ -13,6 +13,11 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { logIn } from "../redux/auth/authSlice";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/config";
+
 import { globalStyles } from "../components/styles/globalStyles";
 
 import { BackgroundComponent } from "../components/BackgroundComponent";
@@ -24,18 +29,21 @@ export const LoginScreen = () => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    if (email === "" || password === "") {
-      return;
+  const handleSubmit = async () => {
+    try {
+      const credentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      dispatch(logIn({ email, password }));
+      navigation.navigate("Home");
+      return credentials.user;
+    } catch (error) {
+      alert(error.message);
     }
-
-    console.log({ email, password });
-
-    navigation.navigate("Home");
-
-    setEmail("");
-    setPassword("");
   };
 
   const togglePassword = () => {

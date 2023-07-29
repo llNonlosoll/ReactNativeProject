@@ -9,6 +9,8 @@ import {
 import { useSelector } from "react-redux";
 import { selectPosts } from "../redux/posts/selectors";
 
+import { auth } from "../firebase/config";
+
 import { BackgroundComponent } from "../components/BackgroundComponent";
 import { UserPostsComponent } from "../components/UserPostsComponent";
 import { LogoutButtonComponent } from "../components/LogoutButtonComponent";
@@ -17,6 +19,7 @@ import { DeleteIcon } from "../components/icons/icons";
 
 export const ProfileScreen = () => {
   const posts = useSelector(selectPosts);
+  const userName = auth.currentUser?.displayName;
 
   return (
     <BackgroundComponent>
@@ -30,7 +33,7 @@ export const ProfileScreen = () => {
             <DeleteIcon />
           </TouchableOpacity>
         </View>
-        <Text style={styles.text}>Natali Romanova</Text>
+        <Text style={styles.text}>{userName}</Text>
 
         <FlatList
           data={posts}

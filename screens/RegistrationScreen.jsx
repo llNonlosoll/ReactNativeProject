@@ -13,6 +13,17 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+
+import {
+  updateProfile,
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
+import { auth } from "../firebase/config";
+
+import { createUser } from "../redux/auth/authSlice";
+
 import { globalStyles } from "../components/styles/globalStyles";
 
 import { BackgroundComponent } from "../components/BackgroundComponent";
@@ -27,22 +38,59 @@ export const RegistrationScreen = () => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    if (login === "" || email === "" || password === "") {
-      return;
+  const updateUserProfile = async (user) => {
+    if (user) {
+      try {
+        await updateProfile(user, { displayName: login });
+      } catch (error) {
+        throw error;
+      }
     }
-    console.log({ login, email, password });
-
-    navigation.navigate("Home");
-
-    setLogin("");
-    setEmail("");
-    setPassword("");
   };
+
+  // const handleSingUp = () => {
+  //   console.log({ login, email, password });
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userInfo) => {
+  //       const user = userInfo.user;
+  //       updateUserProfile(user);
+  //       dispatch(createUser({ email, password }));
+  //       navigation.navigate("Home");
+  //     })
+  //     .catch((error) => {
+  //       alert(error.message);
+  //     });
+  // };
 
   const togglePassword = () => {
     setIsPasswordHidden(!isPasswordHidden);
+  };
+
+  const handleSingUp = () => {
+    console.log({ login, email, password });
+
+    fetchSignInMethodsForEmail(auth, email)
+      .then((signInMethods) => {
+        if (signInMethods.length > 0) {
+          alert("Something went wrong, maybe such a user already exists");
+        } else {
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((userInfo) => {
+              const user = userInfo.user;
+              updateUserProfile(user);
+              dispatch(createUser({ email, password }));
+              navigation.navigate("Home");
+            })
+            .catch((error) => {
+              alert(error.message);
+            });
+        }
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   return (
@@ -110,7 +158,7 @@ export const RegistrationScreen = () => {
                 <TouchableOpacity style={styles.button}>
                   <Text
                     style={[styles.commonText, styles.buttonText]}
-                    onPress={handleSubmit}
+                    onPress={handleSingUp}
                   >
                     Зареєстуватися
                   </Text>

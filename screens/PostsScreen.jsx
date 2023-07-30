@@ -20,6 +20,7 @@ export const PostsScreen = () => {
   const isFocused = useIsFocused();
 
   const posts = useSelector(selectPosts);
+  const sortedPosts = [...posts].sort((a, b) => b.data.date - a.data.date);
 
   useEffect(() => {
     if (isFocused) {
@@ -39,8 +40,6 @@ export const PostsScreen = () => {
       })();
     }
   }, [isFocused]);
-
-  const sortedPosts = [...posts].sort((a, b) => b.data.date - a.data.date);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -71,7 +70,7 @@ export const PostsScreen = () => {
             id={item.id}
             way={item.data.photoUri}
             name={item.data.photoName}
-            commentsNumber={item.data.commentsNumber}
+            commentsNumber={item.data.comments.length}
             country={item.data.locationName}
             coords={item.data.location}
           />

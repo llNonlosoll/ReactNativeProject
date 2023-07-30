@@ -73,7 +73,7 @@ export const CreatePostsScreen = () => {
 
   const writeDataToFirestore = async () => {
     const currentDate = Date.now();
-    console.log(currentDate);
+
     try {
       const docRef = await addDoc(collection(db, "posts"), {
         photoName,
@@ -82,7 +82,7 @@ export const CreatePostsScreen = () => {
         location,
         likes: 0,
         comments: [],
-        commentsNumber: 0,
+        // commentsNumber: 0,
         date: currentDate,
       });
 

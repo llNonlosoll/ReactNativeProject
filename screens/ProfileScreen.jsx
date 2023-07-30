@@ -45,7 +45,7 @@ export const ProfileScreen = () => {
               id={item.id}
               way={item.data.photoUri}
               name={item.data.photoName}
-              commentsNumber={item.data.commentsNumber}
+              commentsNumber={item.data.comments.length}
               country={item.data.locationName}
               coords={item.data.location}
               likes={item.data.likes}

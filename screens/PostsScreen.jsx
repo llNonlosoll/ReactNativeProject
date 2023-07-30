@@ -20,7 +20,6 @@ export const PostsScreen = () => {
   const isFocused = useIsFocused();
 
   const posts = useSelector(selectPosts);
-  const sortedPosts = [...posts].sort((a, b) => b.data.date - a.data.date);
 
   useEffect(() => {
     if (isFocused) {
@@ -63,7 +62,7 @@ export const PostsScreen = () => {
         </View>
       </View>
       <FlatList
-        data={sortedPosts}
+        data={posts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <PostComponent

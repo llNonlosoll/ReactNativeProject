@@ -16,7 +16,7 @@ export const UserPostsComponent = ({
   const navigation = useNavigation();
 
   const handleCommentsRedirect = (way) => {
-    navigation.navigate("Comments", { way: way });
+    navigation.navigate("Comments", { way: way, id: id });
   };
 
   const handleMapRedirect = (coords) => {

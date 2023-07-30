@@ -1,5 +1,6 @@
 import { useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import uuid from "react-native-uuid";
+import { useState, useEffect } from "react";
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -9,9 +10,16 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   StyleSheet,
+  FlatList,
 } from "react-native";
+
+import { doc, updateDoc, getDocs, collection } from "firebase/firestore";
+import { db } from "../firebase/config";
+
+// import { useSelector } from "react-redux";
+// import { selectPosts } from "../redux/posts/selectors";
+// import { useIsFocused } from "@react-navigation/native";
 
 import { CommentComponent } from "../components/CommentComponent";
 
@@ -20,10 +28,58 @@ import { ArrowUp } from "../components/icons/icons";
 import { globalStyles } from "../components/styles/globalStyles";
 
 export const CommentsScreen = () => {
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [comments, setComments] = useState([]);
+
   const route = useRoute();
   const way = route.params?.way;
+  const id = route.params?.id;
+  // const isFocused = useIsFocused();
+  const currentDate = Date.now();
 
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  // const posts = useSelector(selectPosts);
+
+  // const comments = posts.find((post) => post.id === id).data.comments;
+
+  const updateDataInFirestore = async (collectionName, docId) => {
+    try {
+      const ref = doc(db, collectionName, docId);
+
+      await updateDoc(ref, {
+        comments: [
+          ...comments,
+          { comment: inputValue, currentDate, id: uuid.v4() },
+        ],
+      });
+      console.log("document updated");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setInputValue("");
+      Keyboard.dismiss();
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "posts"));
+
+        const postsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+
+        const comments = postsData.find((post) => post.id === id).data.comments;
+
+        setComments(comments);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    })();
+  }, [inputValue]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -42,14 +98,25 @@ export const CommentsScreen = () => {
             },
           ]}
         >
-          <ScrollView>
-            <Image
-              source={typeof way === "number" ? way : { uri: way }}
-              resizeMode={"cover"}
-              style={styles.image}
-            />
-
-            <CommentComponent
+          <Image
+            source={typeof way === "number" ? way : { uri: way }}
+            resizeMode={"cover"}
+            style={styles.image}
+          />
+          <FlatList
+            data={comments}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <CommentComponent
+                img={require("../components/images/userPhotoComments.png")}
+                text={item.comment}
+                date={item.currentDate}
+                direction={"row-reverse"}
+                textAlign={"left"}
+              />
+            )}
+          />
+          {/* <CommentComponent
               img={require("../components/images/commentedUserPhoto.png")}
               text={
                 "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!"
@@ -78,16 +145,20 @@ export const CommentsScreen = () => {
               direction={"row-reverse"}
               textAlign={"left"}
               date={"09 червня, 2020 | 09:25"}
-            />
-          </ScrollView>
+            /> */}
           <View>
             <TextInput
+              value={inputValue}
+              onChangeText={setInputValue}
               onFocus={() => setIsKeyboardVisible(true)}
               onBlur={() => setIsKeyboardVisible(false)}
               style={styles.input}
               placeholder="Коментувати..."
             />
-            <TouchableOpacity style={styles.sendMessageButton}>
+            <TouchableOpacity
+              style={styles.sendMessageButton}
+              onPress={() => updateDataInFirestore("posts", id)}
+            >
               <ArrowUp />
             </TouchableOpacity>
           </View>

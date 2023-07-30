@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 // import { nanoid } from "nanoid";
-import uuid from "react-native-uuid";
+// import uuid from "react-native-uuid";
 
 const initialState = {
   posts: [],

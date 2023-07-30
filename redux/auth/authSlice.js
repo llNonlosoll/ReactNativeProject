@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: { email: "", password: "" },
+  isLoggedIn: false,
 };
 
 export const authSlice = createSlice({
@@ -14,9 +15,11 @@ export const authSlice = createSlice({
     },
     logIn(state, { payload }) {
       state.user = payload;
+      state.isLoggedIn = true;
     },
     logOut(state) {
       state.user = { email: "", password: "" };
+      state.isLoggedIn = false;
     },
   },
 });

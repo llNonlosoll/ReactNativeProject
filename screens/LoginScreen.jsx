@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../redux/auth/selectors";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -28,8 +30,20 @@ export const LoginScreen = () => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  // if (isLoggedIn) {
+  //   navigation.navigate("Home");
+  //   return null;
+  // }
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate("Home");
+    }
+  }, [isLoggedIn, navigation]);
 
   const handleSubmit = async () => {
     try {

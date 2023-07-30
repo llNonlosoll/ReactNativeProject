@@ -2,9 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import * as Location from "expo-location";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import { useDispatch } from "react-redux";
-import { addPost } from "../redux/posts/postsSlice";
 import { useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
@@ -27,8 +26,8 @@ import { globalStyles } from "../components/styles/globalStyles";
 import { CameraIcon, LocationIcon, TrashIcon } from "../components/icons/icons";
 
 export const CreatePostsScreen = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [location, setLocation] = useState(null);
@@ -39,20 +38,22 @@ export const CreatePostsScreen = () => {
   const cameraRef = useRef(null);
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-      }
+    if (isFocused) {
+      (async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
+        }
 
-      let location = await Location.getCurrentPositionAsync({});
-      const coords = {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      };
-      setLocation(coords);
-    })();
-  }, []);
+        let location = await Location.getCurrentPositionAsync({});
+        const coords = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+        setLocation(coords);
+      })();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     (async () => {
@@ -70,16 +71,21 @@ export const CreatePostsScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
-  console.log(location);
-
   const writeDataToFirestore = async () => {
+    const currentDate = Date.now();
+    console.log(currentDate);
     try {
       const docRef = await addDoc(collection(db, "posts"), {
         photoName,
         locationName,
         photoUri,
         location,
+        likes: 0,
+        comments: [],
+        commentsNumber: 0,
+        date: currentDate,
       });
+
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -95,7 +101,6 @@ export const CreatePostsScreen = () => {
 
   const handlePostPhoto = () => {
     writeDataToFirestore();
-    // dispatch(addPost({ photoName, locationName, photoUri, location }));
     navigation.navigate("Home", { screen: "Posts" });
     clearData();
   };

@@ -7,6 +7,8 @@ import { addPost } from "../redux/posts/postsSlice";
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../firebase/config";
 
+import { useIsFocused } from "@react-navigation/native";
+
 import { globalStyles } from "../components/styles/globalStyles";
 
 import { PostComponent } from "../components/PostComponent";
@@ -14,27 +16,31 @@ import { PostComponent } from "../components/PostComponent";
 export const PostsScreen = () => {
   const [user, setUser] = useState(null);
 
-  const posts = useSelector(selectPosts);
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  const posts = useSelector(selectPosts);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "posts"));
+    if (isFocused) {
+      (async () => {
+        try {
+          const snapshot = await getDocs(collection(db, "posts"));
 
-        const postsData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-          commentsNumber: 0,
-          likes: 0,
-        }));
-        dispatch(addPost(postsData));
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    })();
-  }, []);
+          const postsData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }));
+          dispatch(addPost(postsData));
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
+      })();
+    }
+  }, [isFocused]);
+
+  const sortedPosts = [...posts].sort((a, b) => b.data.date - a.data.date);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -58,14 +64,14 @@ export const PostsScreen = () => {
         </View>
       </View>
       <FlatList
-        data={posts}
+        data={sortedPosts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <PostComponent
             id={item.id}
             way={item.data.photoUri}
             name={item.data.photoName}
-            commentsNumber={item.commentsNumber}
+            commentsNumber={item.data.commentsNumber}
             country={item.data.locationName}
             coords={item.data.location}
           />

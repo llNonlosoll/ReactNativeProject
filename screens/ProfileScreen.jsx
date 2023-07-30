@@ -21,6 +21,8 @@ export const ProfileScreen = () => {
   const posts = useSelector(selectPosts);
   const userName = auth.currentUser?.displayName;
 
+  const sortedPosts = [...posts].sort((a, b) => b.data.date - a.data.date);
+
   return (
     <BackgroundComponent>
       <View style={styles.wrapper}>
@@ -36,17 +38,17 @@ export const ProfileScreen = () => {
         <Text style={styles.text}>{userName}</Text>
 
         <FlatList
-          data={posts}
+          data={sortedPosts}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <UserPostsComponent
               id={item.id}
               way={item.data.photoUri}
               name={item.data.photoName}
-              commentsNumber={item.commentsNumber}
+              commentsNumber={item.data.commentsNumber}
               country={item.data.locationName}
               coords={item.data.location}
-              likes={item.likes}
+              likes={item.data.likes}
             />
           )}
         />

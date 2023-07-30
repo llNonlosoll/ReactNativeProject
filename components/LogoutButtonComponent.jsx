@@ -1,7 +1,6 @@
+import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-
-import { TouchableOpacity } from "react-native";
 
 import { logOut } from "../redux/auth/authSlice";
 import { auth } from "../firebase/config";

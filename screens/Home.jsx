@@ -5,10 +5,10 @@ import { ProfileScreen } from "../screens/ProfileScreen";
 import { CreatePostsScreen } from "../screens/CreatePostsScreen";
 import { PostsScreen } from "../screens/PostsScreen";
 
-import { AddIcon, UserIcon, GridIcon } from "../components/icons/icons";
-
 import { LogoutButtonComponent } from "../components/LogoutButtonComponent";
 import { BackButtonComponent } from "../components/BackButtonComponent";
+
+import { AddIcon, UserIcon, GridIcon } from "../components/icons/icons";
 
 export const Home = () => {
   const Tabs = createBottomTabNavigator();

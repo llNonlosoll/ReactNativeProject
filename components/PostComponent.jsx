@@ -1,6 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { CommentIcon, LocationIcon } from "../components/icons/icons";
 

@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
 import { useDispatch } from "react-redux";
 
 import {
@@ -24,11 +23,11 @@ import { auth } from "../firebase/config";
 
 import { createUser } from "../redux/auth/authSlice";
 
-import { globalStyles } from "../components/styles/globalStyles";
-
 import { BackgroundComponent } from "../components/BackgroundComponent";
 
 import { AddIcon } from "../components/icons/icons";
+
+import { globalStyles } from "../components/styles/globalStyles";
 
 export const RegistrationScreen = () => {
   const [login, setLogin] = useState("");
@@ -49,20 +48,6 @@ export const RegistrationScreen = () => {
       }
     }
   };
-
-  // const handleSingUp = () => {
-  //   console.log({ login, email, password });
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //     .then((userInfo) => {
-  //       const user = userInfo.user;
-  //       updateUserProfile(user);
-  //       dispatch(createUser({ email, password }));
-  //       navigation.navigate("Home");
-  //     })
-  //     .catch((error) => {
-  //       alert(error.message);
-  //     });
-  // };
 
   const togglePassword = () => {
     setIsPasswordHidden(!isPasswordHidden);

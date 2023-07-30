@@ -4,10 +4,6 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
-
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../firebase/config";
-
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -20,6 +16,9 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 import { globalStyles } from "../components/styles/globalStyles";
 

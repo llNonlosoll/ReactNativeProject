@@ -6,12 +6,12 @@ import { useDispatch } from "react-redux";
 import { addPost } from "../redux/posts/postsSlice";
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../firebase/config";
-
 import { useIsFocused } from "@react-navigation/native";
+
+import { PostComponent } from "../components/PostComponent";
 
 import { globalStyles } from "../components/styles/globalStyles";
 
-import { PostComponent } from "../components/PostComponent";
 
 export const PostsScreen = () => {
   const [user, setUser] = useState(null);

@@ -14,15 +14,15 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
 import { useDispatch } from "react-redux";
+
 import { logIn } from "../redux/auth/authSlice";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config";
 
-import { globalStyles } from "../components/styles/globalStyles";
-
 import { BackgroundComponent } from "../components/BackgroundComponent";
+
+import { globalStyles } from "../components/styles/globalStyles";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -33,11 +33,6 @@ export const LoginScreen = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  // if (isLoggedIn) {
-  //   navigation.navigate("Home");
-  //   return null;
-  // }
 
   useEffect(() => {
     if (isLoggedIn) {
